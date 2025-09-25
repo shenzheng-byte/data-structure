@@ -102,4 +102,85 @@ void arrayQueue<T>::pop()
     front=(front+1)%arrayLength;
 }
 
+//队列的链表描述
+template<class T>
+struct chainNode
+{
+    T element;
+    chainNode<T>* next;
+};
+
+template<class T>
+class linkedQueue
+{
+private:
+    chainNode<T>* front,back;
+    int size; 
+public:
+    linkedQueue(int capacity=10){ front=NULL; back=NULL; size=0; }
+    ~linkedQueue();
+    bool is_empty(){ return size==0;}
+    int get_size(){ return size;}
+    T& get_front();
+    T& get_back();
+    void push(const T& value);
+    void pop();
+};
+
+template<class T>
+linkedQueue<T>::~linkedQueue()
+{
+    while (front!=NULL)
+    {
+        chainNode<T>* next=front->next;
+        delete front;
+        front=next;
+    }
+}
+
+template<class T>
+T& linkedQueue<T>::get_front()
+{
+    if(front==NULL){
+        throw out_of_range("队列为空");
+    }
+    return front->element;
+}
+
+template<class T>
+T& linkedQueue<T>::get_back()
+{
+    if(back==NULL){
+        throw out_of_range("队列为空");
+    }
+    return back->element;
+}
+
+template<class T>
+void linkedQueue<T>::push(const T& value)
+{
+    chainNode<T>* newnode=new chainNode<T>;
+    newnode->next=NULL;
+    if(front==NULL){
+        front=newnode;
+        back=newnode;
+    }
+    else{
+        back->next=newnode;
+    }
+    size++;
+}
+
+template<class T>
+void linkedQueue<T>::pop()
+{
+    if(back==NULL){
+        throw out_of_range("队列为空");
+    }
+    chainNode<T>* deleteNode=front;
+    front=front->next;
+    delete deleteNode;
+    size--;
+}
+
 #endif  QUEUE
