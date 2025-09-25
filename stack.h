@@ -56,7 +56,7 @@ void arrayStack<T>::push(const T &value)
         delete[] stack;
         stack=temp;
         arrayLength*=2;
-    }
+    }    //数组加长
     stack[++top]=value;
 }
 
