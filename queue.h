@@ -167,6 +167,7 @@ void linkedQueue<T>::push(const T& value)
     }
     else{
         back->next=newnode;
+        back=newnode;
     }
     size++;
 }
