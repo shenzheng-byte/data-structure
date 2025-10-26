@@ -73,6 +73,7 @@ chain<T>::~chain()
         delete firstNode;
         firstNode=t;
     }
+    listSize=0;
 }
 
 template<class T>
@@ -90,6 +91,7 @@ chain<T>::chain(const chain<T>& theChain)
     {
         p->element=sourceNode->element;
         p->next=new chainNode<T>;
+        p=p->next;
         sourceNode=sourceNode->next;
     }
     p->next=NULL;

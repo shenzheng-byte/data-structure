@@ -3,6 +3,8 @@
 #include<iostream>
 #include<stdexcept>
 using namespace std;
+
+//数组描述字典
 template<class K,class E>
 class sortedArrayList
 {
@@ -108,5 +110,115 @@ void sortedArrayList<K,E>::erase(const K& theKey)
     }
 }
 
+//链表描述字典
+template<class K,class E>
+struct pairNode
+{
+    pair<K,E> element;
+    pairNode<K,E>* next; 
+};
+
+template<class K,class E>
+class sortedChain
+{
+private:
+    int listSize;
+    pairNode<K,E>* firstNode;
+public:
+    sortedChain(const sortedChain& theChain);
+    sortedChain();
+    ~sortedChain();
+    int size(){ return listSize;}
+    void insert(const pair<K,E>& thePair);
+    void erase(const K& key);
+    pair<K,E>* find(const K& key);
+};
+
+template<class K,class E>
+sortedChain<K,E>::sortedChain()
+{
+    listSize=0;
+    firstNode=NULL;
+}
+
+template<class K,class E>
+sortedChain<K,E>::sortedChain(const sortedChain& theChain)
+{
+    if(theChain.listSize==0){
+        listSize=0;
+        firstNode=NULL;
+        return ;
+    }
+    listSize=theChain.listSize;
+    firstNode=new pairNode<K,E>;
+    pairNode<K,E>* p=firstNode;
+    pairNode<K,E>* q=theChain.firstNode;
+    while(q!=NULL){
+        p->element=q->element;
+        p->next=new pairNode<K,E>;
+        p=p->next;
+        q=q->next;
+    }
+    p->next=NULL;
+}
+
+template<class K,class E>
+sortedChain<K,E>::~sortedChain()
+{
+    while(firstNode!=NULL){
+        pairNode<K,E>* p=firstNode;
+        firstNode=p->next;
+        delete p;
+    }
+    listSize=0;
+}
+
+template<class K,class E>
+void sortedChain<K,E>::insert(const pair<K,E>& thePair)
+{
+    pairNode<K,E>* p=firstNode;
+    pairNode<K,E>* pre=NULL;
+    while(p!=NULL&&p->element.first<thePair.first){
+        pre=p;
+        p=p->next;
+    }
+    if(p!=NULL&&p->element.first==thePair.first){
+        p->element.second=thePair.second;
+        return ;
+    }
+    pairNode<K,E>* newnode=new pairNode<K,E>;
+    newnode->element=thePair;
+    newnode->next=p;
+    if(pre==NULL) firstNode=newnode;
+    else pre->next=newnode;
+    listSize++;
+}
+
+template<class K,class E>
+void sortedChain<K,E>::erase(const K& key)
+{
+    pairNode<K,E>* p=firstNode;
+    pairNode<K,E>* pre=NULL;
+    while(p!=NULL&&p->element.first!=key){
+        pre=p;
+        p=p->next;
+    }
+    if(p==NULL) throw out_of_range("Not find the key");
+    if(pre==NULL) firstNode=firstNode->next;
+    else pre->next=p->next;
+    delete p;
+    listSize--;
+}
+
+template<class K,class E>
+pair<K,E>* sortedChain<K,E>::find(const K& key)
+{
+    pairNode<K,E>* p=firstNode;
+    while(p!=NULL&&p->element.first!=key){
+        p=p->next;
+    }
+    if(p==NULL) return NULL;
+    else return &p->element;
+}
 
 #endif
