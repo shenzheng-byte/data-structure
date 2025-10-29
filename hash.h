@@ -71,9 +71,10 @@ void hashTable<K,E>::erase(const K& key)
         while(table[current]!=NULL){
             if(hash(table[current]->first)==current) break;
             else{
-                table[b]->first=table[(b+1)%divisor]->first;
-                table[b]->second=table[(b+1)%divisor]->second;
-                b=(b+1)%divisor;
+                table[b]->first=table[current]->first;
+                table[b]->second=table[current]->second;
+                b=current;
+                current=(current+1)%divisor;
             }
         }
         delete table[b];
