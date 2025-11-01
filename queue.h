@@ -184,4 +184,4 @@ void linkedQueue<T>::pop()
     size--;
 }
 
-#endif  QUEUE
+#endif  
