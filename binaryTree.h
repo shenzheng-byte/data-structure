@@ -208,3 +208,5 @@ void linkedBinaryTree<T>::levelOrder(binaryTreeNode<T>* t)
         else t=NULL;
     }
 }
+
+//还有前序中序后序的非递归形式
