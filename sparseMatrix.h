@@ -27,6 +27,7 @@ public:
     void set(const int theRow,const int theColumn,const T Value);
     void transpose();
     sparseMatrix<T> add(const sparseMatrix<T>& b);
+    sparseMatrix<T> multiply(const sparseMatrix<T>& b);
 };
 
 template<class T>
@@ -166,4 +167,53 @@ void sparseMatrix<T>::transpose()
     delete[] rowNext;
 }
 
-#endif SPARSE
+template<class T>
+sparseMatrix<T> sparseMatrix<T>::multiply(const sparseMatrix<T>& b)
+{
+    if(cols!=b.rows){
+        throw invalid_argument("The sparseMatrix b is invalid!");
+    }
+    sparseMatrix<T> c;
+    c.cols=b.cols;
+    c.rows=rows;
+    int cSize=0;
+    int br=b.rows,bc=b.cols;
+    int* rowSize=new int[br+1];
+    int* rowNext=new int[br+1];
+    int* Answer=new int[bc+1];
+    for(int i=1;i<=br;i++)
+        rowSize=0;
+    typename arrayList<matrixTerm<T>>::iterator itb=b.term.begin();
+    typename arrayList<matrixTerm<T>>::iterator itbEnd=b.term.end();
+    for(;itb!=itbEnd;itb++){
+        rowSize[(*itb).row]++;
+    }
+    rowNext[1]=0;
+    for(int i=2;i<=b.rows;i++){
+        rowNext[i]=rowNext[i-1]+rowSize[i-1];
+    }
+
+    int p=0;
+    for(int i=1;i<=rows&&p<term.get_listSize();i++){
+        for(int j=1;j<=bc;j++)
+            Answer[j]=0;
+        while(p<term.get_listSize()&&term[p].row==i){
+            int t=term[p].col;
+            if(rowSize[t]!=0){
+                for(int z=rowNext[t];z<rowNext[t]+rowSize[t];z++)
+                    Answer[b.term[z].col]+=term[p].value*b.term[z].value;
+            }
+            p++;
+        }
+        for(int k=1;k<=b.cols;k++){
+            if(Answer[k]!=0)
+                c.term.insert(cSize++,Answer[k]);
+        }
+    }
+    delete[] rowNext;
+    delete[] rowSize;
+    delete[] Answer;
+    return c;
+}
+
+#endif
