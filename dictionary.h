@@ -78,7 +78,7 @@ void sortedArrayList<K,E>::insert(const pair<K,E>& thePair)
         int i;
         for(i=listSize-1;i>=0;i--){
             if(data[i].first>thePair.first)
-                data[i+1]=data[i-1];
+                data[i+1]=data[i];
             else break;
         }
         data[i+1]=thePair;
