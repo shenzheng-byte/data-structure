@@ -76,12 +76,12 @@ void sortedArrayList<K,E>::insert(const pair<K,E>& thePair)
         if(listSize==arrayLength) 
             extend();
         int i;
-        for(i=listSize;i>0;i--){
+        for(i=listSize-1;i>=0;i--){
             if(data[i].first>thePair.first)
-                data[i]=data[i-1];
+                data[i+1]=data[i-1];
             else break;
         }
-        data[i]=thePair;
+        data[i+1]=thePair;
         listSize++;
     }
 }
