@@ -13,6 +13,7 @@ public:
     maxHeap(int capacity=10);
     ~maxHeap(){ delete[] heap;}
     int size(){ return heapSize;}
+    void initialize(T* theHeap,int size);
     bool is_empty(){ return heapSize==0;}
     void extend();
     T& top();
@@ -31,10 +32,32 @@ maxHeap<T>::maxHeap(int capacity)
 }
 
 template<class T>
+void maxHeap<T>::initialize(T* theHeap,int size)
+{
+    delete[] heap;
+    heap=theHeap;
+    heapSize=size;
+    arrayLength=size+10;
+    for(int root=heapSize/2;root>=1;root--){
+        T rootElement=heap[root];
+        int child=2*root;
+        while(child<=heapSize){
+            if(child<heapSize&&heap[child]<heap[child+1])
+                child++;
+            if(rootElement>=heap[child])
+                break;
+            heap[child/2]=heap[child];
+            child*=2;
+        }
+        heap[child/2]=rootElement;
+    }
+}
+
+template<class T>
 T& maxHeap<T>::top()
 {
     if(is_empty())
-        throw out_of_range("The heap is empty")；
+        throw out_of_range("The heap is empty");
     return heap[1];
 }
 

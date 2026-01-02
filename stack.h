@@ -24,7 +24,7 @@ public:
 };
 
 template<class T>
-arrayStack<T>::arrayStack(int capacity=10)
+arrayStack<T>::arrayStack(int capacity)
 {
     if(capacity<1){
         ostringstream s;
@@ -142,4 +142,4 @@ void linkedStack<T>::pop()
 }
 
 
-#endif STACK
+#endif 
