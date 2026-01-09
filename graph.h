@@ -18,6 +18,8 @@ public:
     void removeEdge(int i,int j);
     bool isEdge(int i,int j) const;
     int getNumOfVertices() const { return n; }
+    void set(int i,int j,int weight){ adjMatrix[i][j]=weight; }
+    int get(int i,int j) const { return adjMatrix[i][j]; }
 };
 
 adjMatrixGraph::adjMatrixGraph(int N)
